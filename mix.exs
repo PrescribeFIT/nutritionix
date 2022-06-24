@@ -11,17 +11,16 @@ defmodule Nutritionix.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
       extra_applications: [:logger]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tesla, "~> 1.4.4"}
+      {:tesla, "~> 1.4.4"},
+      {:dotenv, "~> 3.0.0", only: [:dev, :test]}
     ]
   end
 end
