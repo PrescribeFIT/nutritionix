@@ -7,6 +7,15 @@ defmodule Nutritionix do
   @nutritionix_api_baseurl "https://trackapi.nutritionix.com"
 
   @doc """
+  Lookup
+  """
+  def ingredient_search(client, term) do
+    Tesla.get(client, "/v2/search/instant", query: [query: term])
+  end
+
+  @spec client([{:app_id, String.t()} | {:app_key, String.t()} | {:user_id, String.t()}, ...]) ::
+          {:ok, Tesla.Client.t()} | {:error, String.t()}
+  @doc """
   Get a client for the Nutritionix service.
 
   The Nutritionix API requires a user identifier to distinguish one user from
@@ -14,18 +23,21 @@ defmodule Nutritionix do
 
   ## Examples
 
-      iex> {:ok, %Tesla.Client{}} = Nutritionix.client("userid")
+      iex> {:ok, %Tesla.Client{}} = Nutritionix.client(user_id: "userid",
+      ...>                                             app_key: "key",
+      ...>                                             app_id: "id")
   """
-  @spec client(String.t()) :: {:ok, Tesla.Client.t()}
-  def client(user_id) do
+  def client(user_id: user_id, app_key: app_key, app_id: app_id) do
     try do
-      {:ok, client!(user_id)}
+      {:ok, client!(user_id: user_id, app_key: app_key, app_id: app_id)}
     rescue
       e ->
         {:error, e.message}
     end
   end
 
+  @spec client!([{:app_id, String.t()} | {:app_key, String.t()} | {:user_id, String.t()}, ...]) ::
+          Tesla.Client.t()
   @doc """
   Get a client for the Nutritionix service (directly, no tuple)
 
@@ -33,13 +45,11 @@ defmodule Nutritionix do
 
   ## Examples
 
-      iex> %Tesla.Client{} = Nutritionix.client!("userid")
+      iex> %Tesla.Client{} = Nutritionix.client!(user_id: "userid",
+      ...>                                       app_key: "key",
+      ...>                                       app_id: "id")
   """
-  @spec client!(String.t()) :: Tesla.Client.t()
-  def client!(user_id) do
-    app_id = System.fetch_env!("NUTRITIONIX_APP_ID")
-    app_key = System.fetch_env!("NUTRITIONIX_APP_KEY")
-
+  def client!(user_id: user_id, app_key: app_key, app_id: app_id) do
     middleware = [
       {Tesla.Middleware.BaseUrl, @nutritionix_api_baseurl},
       {Tesla.Middleware.Headers,
