@@ -6,8 +6,6 @@ defmodule Nutritionix.Client do
   """
   @nutritionix_api_baseurl "https://trackapi.nutritionix.com"
 
-  @spec new([{:app_id, String.t()} | {:app_key, String.t()} | {:user_id, String.t()}, ...]) ::
-          {:ok, Tesla.Client.t()} | {:error, String.t()}
   @doc """
   Get a client for the Nutritionix service.
 
@@ -16,21 +14,21 @@ defmodule Nutritionix.Client do
 
   ## Examples
 
-      iex> {:ok, %Tesla.Client{}} = Nutritionix.Client.new(user_id: "userid",
+      iex> {:ok, %Tesla.Client{}} = Nutritionix.Client.new(%{user_id: "userid",
       ...>                                             app_key: "key",
-      ...>                                             app_id: "id")
+      ...>                                             app_id: "id"})
   """
-  def new(user_id: user_id, app_key: app_key, app_id: app_id) do
+  @spec new(%{:app_id => String.t(), :app_key => String.t(), :user_id => String.t()}) ::
+          {:error, String.t() | {:ok, Tesla.Client.t()}}
+  def new(%{user_id: _, app_key: _, app_id: _} = args) do
     try do
-      {:ok, new!(user_id: user_id, app_key: app_key, app_id: app_id)}
+      {:ok, new!(args)}
     rescue
       e ->
         {:error, e.message}
     end
   end
 
-  @spec new!([{:app_id, String.t()} | {:app_key, String.t()} | {:user_id, String.t()}, ...]) ::
-          Tesla.Client.t()
   @doc """
   Get a client for the Nutritionix service (directly, no tuple)
 
@@ -38,11 +36,13 @@ defmodule Nutritionix.Client do
 
   ## Examples
 
-      iex> %Tesla.Client{} = Nutritionix.Client.new!(user_id: "userid",
+      iex> %Tesla.Client{} = Nutritionix.Client.new!(%{user_id: "userid",
       ...>                                       app_key: "key",
-      ...>                                       app_id: "id")
+      ...>                                       app_id: "id"})
   """
-  def new!(user_id: user_id, app_key: app_key, app_id: app_id) do
+  @spec new!(%{:app_id => String.t(), :app_key => String.t(), :user_id => String.t()}) ::
+          Tesla.Client.t()
+  def new!(%{user_id: user_id, app_key: app_key, app_id: app_id}) do
     middleware = [
       {Tesla.Middleware.BaseUrl, @nutritionix_api_baseurl},
       {Tesla.Middleware.Headers,
