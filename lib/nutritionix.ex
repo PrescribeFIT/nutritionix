@@ -35,6 +35,6 @@ defmodule Nutritionix do
 
   @spec parse_description(Tesla.Client.t(), String.t()) :: {:error, any} | {:ok, Tesla.Env.t()}
   def parse_description(client, description) do
-    Tesla.post(client, "/v2/natural/nutrients", body: [query: description])
+    Tesla.post(client, "/v2/natural/nutrients", %{query: description})
   end
 end
