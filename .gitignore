@@ -24,3 +24,6 @@ nutritionix-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# The actual dotenv file
+.env
