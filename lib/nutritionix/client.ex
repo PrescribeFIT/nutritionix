@@ -19,7 +19,7 @@ defmodule Nutritionix.Client do
       ...>                                             app_id: "id"})
   """
   @spec new(%{:app_id => String.t(), :app_key => String.t(), :user_id => String.t()}) ::
-          {:error, String.t() | {:ok, Tesla.Client.t()}}
+          {:error, String.t()} | {:ok, Tesla.Client.t()}
   def new(%{user_id: _, app_key: _, app_id: _} = args) do
     try do
       {:ok, new!(args)}
