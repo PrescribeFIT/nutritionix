@@ -19,7 +19,7 @@ defmodule Nutritionix.Client do
       ...>                                             app_id: "id"})
   """
   @spec new(%{:app_id => String.t(), :app_key => String.t(), :user_id => String.t()}) ::
-          {:error, String.t() | {:ok, Tesla.Client.t()}}
+          {:error, String.t()} | {:ok, Tesla.Client.t()}
   def new(%{user_id: _, app_key: _, app_id: _} = args) do
     try do
       {:ok, new!(args)}
@@ -41,7 +41,7 @@ defmodule Nutritionix.Client do
       ...>                                       app_id: "id"})
   """
   @spec new!(%{:app_id => String.t(), :app_key => String.t(), :user_id => String.t()}) ::
-          Tesla.Client.t()
+          Tesla.Client.t() | no_return()
   def new!(%{user_id: user_id, app_key: app_key, app_id: app_id}) do
     middleware = [
       {Tesla.Middleware.BaseUrl, @nutritionix_api_baseurl},
