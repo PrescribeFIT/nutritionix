@@ -110,4 +110,11 @@ defmodule Nutritionix do
   def lookup_nix(client, nix_id) do
     Tesla.get(client, "/v2/search/item", query: [nix_item_id: nix_id])
   end
+
+  @doc """
+  Look up a branded food item by its UPC
+  """
+  def lookup_upc(client, upc) do
+    Tesla.get(client, "/v2/search/item", query: [upc: upc])
+  end
 end
