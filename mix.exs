@@ -20,7 +20,6 @@ defmodule Nutritionix.MixProject do
   defp deps do
     [
       {:tesla, "~> 1.8"},
-      {:dotenv, "~> 3.0.0", only: [:dev, :test]},
       {:jason, "~> 1.4"}
     ]
   end
